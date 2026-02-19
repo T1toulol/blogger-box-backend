@@ -1,7 +1,9 @@
 package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.dto.CategoryDto;
-import org.springframework.http.HttpStatus;
+import com.dauphine.blogger.dto.PostDto;
+import com.dauphine.blogger.service.CategoryService;
+import com.dauphine.blogger.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,40 +14,51 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
 
+    private final CategoryService categoryService;
+    private final PostService postService;
+
+    public CategoryController(CategoryService categoryService, PostService postService) {
+        this.categoryService = categoryService;
+        this.postService = postService;
+    }
+
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        // endpoints exposed, not implemented
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        return ResponseEntity.ok(categoryService.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        CategoryDto dto = categoryService.getById(id);
+        return dto == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto);
     }
 
     @PostMapping
     public ResponseEntity<Void> createCategory(@RequestBody CategoryDto dto) {
-        // In a real implementation you'd persist and return Location header
-        return ResponseEntity.created(URI.create("/categories/0")).build();
+        CategoryDto created = categoryService.create(dto);
+        return ResponseEntity.created(URI.create("/categories/" + created.id())).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCategory(@PathVariable Long id, @RequestBody CategoryDto dto) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        CategoryDto updated = categoryService.update(id, dto);
+        return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchCategory(@PathVariable Long id, @RequestBody CategoryDto dto) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        CategoryDto updated = categoryService.update(id, dto);
+        return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        categoryService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<List<?>> getPostsByCategory(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Long id) {
+        return ResponseEntity.ok(postService.getByCategoryId(id));
     }
 }

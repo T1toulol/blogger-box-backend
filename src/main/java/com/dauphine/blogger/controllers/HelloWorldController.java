@@ -22,4 +22,9 @@ public class HelloWorldController {
     public String Hello(@PathVariable String name){
         return "Hello" + name;
     }
+
+    @GetMapping("Endpoit")
+    public String endpoint(){
+        return "C'est le point de la fin";
+    }
 }
