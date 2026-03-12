@@ -19,14 +19,14 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(required = false) String date) {
-        return ResponseEntity.ok(postService.getAll(date));
+    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(required = false) String date,
+                                                      @RequestParam(required = false) String value) {
+        return ResponseEntity.ok(postService.getAll(date, value));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
-        PostDto dto = postService.getById(id);
-        return dto == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto);
+        return ResponseEntity.ok(postService.getById(id));
     }
 
     @PostMapping
@@ -37,14 +37,14 @@ public class PostController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostDto dto) {
-        PostDto updated = postService.update(id, dto);
-        return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.noContent().build();
+        postService.update(id, dto);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchPost(@PathVariable Long id, @RequestBody PostDto dto) {
-        PostDto updated = postService.update(id, dto);
-        return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.noContent().build();
+        postService.update(id, dto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +55,6 @@ public class PostController {
 
     @GetMapping("/{id}/categories")
     public ResponseEntity<List<Long>> getCategoriesByPost(@PathVariable Long id) {
-        PostDto dto = postService.getById(id);
-        return dto == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto.categoryIds());
+        return ResponseEntity.ok(postService.getById(id).categoryIds());
     }
 }

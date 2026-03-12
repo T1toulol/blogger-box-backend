@@ -23,14 +23,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAll());
+    public ResponseEntity<List<CategoryDto>> getAllCategories(@RequestParam(required = false) String name) {
+        return ResponseEntity.ok(categoryService.getAll(name));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        CategoryDto dto = categoryService.getById(id);
-        return dto == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto);
+        return ResponseEntity.ok(categoryService.getById(id));
     }
 
     @PostMapping
@@ -41,14 +40,14 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCategory(@PathVariable Long id, @RequestBody CategoryDto dto) {
-        CategoryDto updated = categoryService.update(id, dto);
-        return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.noContent().build();
+        categoryService.update(id, dto);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchCategory(@PathVariable Long id, @RequestBody CategoryDto dto) {
-        CategoryDto updated = categoryService.update(id, dto);
-        return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.noContent().build();
+        categoryService.update(id, dto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
