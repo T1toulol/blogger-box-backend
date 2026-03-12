@@ -5,7 +5,7 @@ import com.dauphine.blogger.dto.CategoryDto;
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDto> getAll();
+    List<CategoryDto> getAll(String nameFilter);
     CategoryDto getById(Long id);
     CategoryDto create(CategoryDto dto);
     CategoryDto update(Long id, CategoryDto dto);

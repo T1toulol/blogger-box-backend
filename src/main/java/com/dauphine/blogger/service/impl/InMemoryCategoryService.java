@@ -5,7 +5,6 @@ import com.dauphine.blogger.model.Category;
 import com.dauphine.blogger.service.CategoryService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,8 +18,10 @@ public class InMemoryCategoryService implements CategoryService {
     private final AtomicLong seq = new AtomicLong(1);
 
     @Override
-    public List<CategoryDto> getAll() {
+    public List<CategoryDto> getAll(String nameFilter) {
+        final String filter = (nameFilter == null) ? null : nameFilter.trim().toLowerCase();
         return store.values().stream()
+                .filter(c -> filter == null || filter.isEmpty() || c.getName().toLowerCase().contains(filter))
                 .map(c -> new CategoryDto(c.getId(), c.getName()))
                 .collect(Collectors.toList());
     }
