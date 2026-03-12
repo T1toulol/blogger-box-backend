@@ -1,23 +1,35 @@
 package com.dauphine.blogger.model;
 
+import jakarta.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
+@Entity
+@Table(name = "posts")
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(columnDefinition = "text")
     private String content;
+
     private Instant createdDate;
-    private List<Long> categoryIds;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Post() {}
 
-    public Post(Long id, String title, String content, Instant createdDate, List<Long> categoryIds) {
+    public Post(Long id, String title, String content, Instant createdDate, Category category) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.createdDate = createdDate;
-        this.categoryIds = categoryIds;
+        this.category = category;
     }
 
     public Long getId() { return id; }
@@ -32,6 +44,6 @@ public class Post {
     public Instant getCreatedDate() { return createdDate; }
     public void setCreatedDate(Instant createdDate) { this.createdDate = createdDate; }
 
-    public List<Long> getCategoryIds() { return categoryIds; }
-    public void setCategoryIds(List<Long> categoryIds) { this.categoryIds = categoryIds; }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 }

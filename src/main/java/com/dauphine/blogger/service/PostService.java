@@ -5,7 +5,7 @@ import com.dauphine.blogger.dto.PostDto;
 import java.util.List;
 
 public interface PostService {
-    List<PostDto> getAll(String dateFilter);
+    List<PostDto> getAll(String dateFilter, String value);
     PostDto getById(Long id);
     PostDto create(PostDto dto);
     PostDto update(Long id, PostDto dto);
